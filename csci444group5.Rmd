@@ -1,11 +1,8 @@
 ---
 title: "Analysis on Historical Crime Data for New York City"
-author: "Molly pitts"
-date: "11/18/2021"
-output:
-  flexdashboard::flex_dashboard:
-    orientation: rows
-    vertical_layout: scroll
+author: "Molly Pitts"
+date: "2/18/2022"
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -70,10 +67,6 @@ hist_felony_data <- hist_felony_data  %>%
                names_to = "Year", 
                values_to = "Number") %>%
   filter(Felony != "TOTAL SEVEN MAJOR FELONY OFFENSES")
-
-# This is an html widget that allows the viewing and searching of this datatable, as it is one of the most important
-# datasets in this project.
-datatable(hist_felony_data, options = list(pageLength = 5))
 
 ```
 
@@ -265,11 +258,11 @@ felonies_boroughs_2000_plot <- felonies_boroughs_2000_p %>%
                fill = PerCapita)) +
   coord_equal() +
   theme_map() +
-  theme(legend.position = "bottom",
-        legend.key.width = unit(1, 'cm')) +
-  scale_fill_distiller(palette="Blues") +
+  theme(legend.key.width = unit(1.5, 'cm'),
+        legend.key.height = unit(1, 'cm')) +
+  scale_fill_distiller(palette="Blues", direction = 1) +
   facet_wrap(~Felony, labeller = labeller(group = label_wrap_gen(width = 50))) +
-  labs(title = "Total Felonies Per Capita", subtitle = "in 2000")
+  labs(title = "Total Committed Felonies Per Capita", subtitle = "in 2000")
 
 # Map of Number of Felonies committed in each Borough in 2010.
 felonies_boroughs_2010_plot <- felonies_boroughs_2010_p %>%
@@ -285,11 +278,11 @@ felonies_boroughs_2010_plot <- felonies_boroughs_2010_p %>%
                fill = PerCapita)) +
   coord_equal() +
   theme_map() +
-  theme(legend.position = "bottom",
-        legend.key.width = unit(1, 'cm')) +
-  scale_fill_distiller(palette="Blues") +
+  theme(legend.key.width = unit(1.5, 'cm'),
+        legend.key.height = unit(1, 'cm')) +
+  scale_fill_distiller(palette="Blues", direction = 1) +
   facet_wrap(~Felony) +
-  labs(title = "Total Felonies Per Capita", subtitle = "in 2010")
+  labs(title = "Total Committed Felonies Per Capita", subtitle = "in 2010")
 
 # Map of Number of Felonies committed in each Borough in 2020.
 felonies_boroughs_2020_plot <- felonies_boroughs_2020_p %>%
@@ -305,11 +298,11 @@ felonies_boroughs_2020_plot <- felonies_boroughs_2020_p %>%
                fill = PerCapita)) +
   coord_equal() +
   theme_map() +
-  theme(legend.position = "bottom",
-        legend.key.width = unit(1, 'cm')) +
-  scale_fill_distiller(palette="Blues") +
+  theme(legend.key.width = unit(1.5, 'cm'),
+        legend.key.height = unit(1, 'cm')) +
+  scale_fill_distiller(palette="Blues", direction = 1) +
   facet_wrap(~Felony) +
-  labs(title = "Total Felonies Per Capita", subtitle = "in 2020")
+  labs(title = "Total Committed Felonies Per Capita", subtitle = "in 2020")
 
 felonies_boroughs_2000_plot
 felonies_boroughs_2010_plot
@@ -329,7 +322,7 @@ hist_felony_plot_3 <- hist_felony_data %>%
            y = Number,
            fill = Felony)) +
   geom_bar(stat = "identity") +
-  labs(x = "", y = "Number", title = "Felonies Committed in NYC in 2000, 2010, and 2020", fill = "") +
+  labs(x = "", y = "Number", title = "Felonies Committed in Total in NYC in 2000, 2010, and 2020", fill = "") +
   scale_fill_manual(values = colors) +
   theme_minimal() +
   theme(legend.position = "top",
@@ -369,7 +362,7 @@ hist_felony_plot_4
 ### Analysis
 
 1. What were the most common felonies committed in the city of New York in the years 2000, 2010, and 2020?<br>
-  + The most common felonies committed in New York City by total amount and per capita were Grand Larceny in all three years. As seen in the graphs, Grand Larceny is far more common than other crimes. In New York City, Grand larceny involves the theft of property values at over $1000. It also applies to theft of any firearm or vehicle, and can apply to extortion and blackmail. ADD WHY))))))))))))))))<br>
+  + The most common felonies committed in New York City both by total amount and per capita were Grand Larceny in all three years. As seen in the graphs, Grand Larceny is far more common than other crimes. In New York City, Grand larceny involves the theft of property valued at over $1000. It also applies to the theft of any firearm or vehicle, and can apply to extortion and blackmail.<br>
 <br>
 
 ```{r answer-1, echo=FALSE}
@@ -380,33 +373,33 @@ hist_felony_plot_4
 <br>
 2. What were the most common felonies committed in each borough of New York in 2000, 2010, and 2020?<br>
   + The most common felonies committed in each borough are displayed in the tables below:
-  In the year 2000 there were a variety of felonies being committed most often. As time goes on, the trends change. As seen across this report, as overall crime has decreased in New York, Grand Larceny has decreased the slowest, which has made it the most commonly committed felony in New York City today. ADD WHY))))))))))))))))
+  In the year 2000 there were a variety of felonies being committed most often. As time goes on, the trends change. As seen across this report, as overall crime has decreased in New York, Grand Larceny has decreased the slowest, which has made it the most commonly committed felony in New York City today.
 <br>
 
 ```{r answer-2, echo=FALSE}
 # using kableExtra tables to display top felonies
 felonies_boroughs_2000_top <- felonies_boroughs_2000_top[,c(2,3,1,4)]
 felonies_boroughs_2000_top %>%
-  rename(`Most Common Felony` = "Felony") %>%
-  kbl(caption = "Top felonies for each borough of NYC in 2000") %>%
+  select(-`Year`) %>%
+  kbl(caption = "Most Commonly Committed felonies for each borough of NYC in 2000") %>%
   kable_classic(full_width = F, html_font = "Cambria", position = "center")
 
 felonies_boroughs_2010_top <- felonies_boroughs_2010_top[,c(2,3,1,4)]
 felonies_boroughs_2010_top %>%
-  rename(`Most Common Felony` = "Felony") %>%
-  kbl(caption = "Top felonies for each borough of NYC in 2010") %>%
+  select(-`Year`) %>%
+  kbl(caption = "Most Commonly Committed felonies for each borough of NYC in 2010") %>%
   kable_classic(full_width = F, html_font = "Cambria", position = "center")
 
 felonies_boroughs_2020_top <- felonies_boroughs_2020_top[,c(2,3,1,4)]
 felonies_boroughs_2020_top %>%
-  rename(`Most Common Felony` = "Felony") %>%
-  kbl(caption = "Top felonies for each borough of NYC in 2020") %>%
+  select(-`Year`) %>%
+  kbl(caption = "Most Commonly Committed felonies for each borough of NYC in 2020") %>%
   kable_classic(full_width = F, html_font = "Cambria", position = "center")
 ```
 
 <br>
 3. How have felony rates changed over the past two decades?<br>
-  + Overall crime in New York has decreased. In 2019, burglary and grand larceny of vehicles increased, while general grand larceny decreased. Also, there was a period of time around 2010 where grand larceny had decreased significantly. Overall, however, Grand Larceny has become the most commonly committed crime in New York City. ADD WHY))))))))))))))))) <br><br>
+  + Overall crime in New York has decreased. Both the overall amount of felonies and the amount of felonies per capita have decreased notably. In 2019, burglary and grand larceny of vehicles increased, while general grand larceny decreased. Also, there was a period of time around 2010 where grand larceny had decreased significantly. Overall, however, Grand Larceny has become the most commonly committed crime in New York City.<br><br>
 <br> 
 
 ```{r answer-3, echo=FALSE}
@@ -419,337 +412,4 @@ felonies_boroughs_2010_plot
 felonies_boroughs_2020_plot
 ```
 
-# posted 
 
-### posted  Questions
-
-1. What boroughs within NY have the highest/lowest household income?<br>
-	Manhattan anchored by Wall Street shows as one of the world's premiere financial centers. As well as housing the NASDAQ and NYSE stock exchanges. This shows in their wealth.
-
-	Brooklyn, Staten Island, and Queens almost have a bell curve minus a high amount of 100K-199K income levels
-
-	Bronx has an intensely disproportionate income levels versus the rest of the boroughs and was continuously ranked last among the boroughs.
-<br><br>
-2. In what ways have the household income levels improved or worsened over the past 15 years?<br>
-	Bronx: Has steadily remained the borough with the highest population of poor families, with a small decline the last few years.
-
-	Brooklyn: Has “improved” as throughout the years more people with >100K have populated the area.
-
-	Manhattan: Throughout the years it’s become populated with more wealth as anything below 100K income slowly fades.
-
-	Staten Island: Remains about half rich as of today, with the poorer steadily decreasing.
-<br><br>
-3. Is there a correlation between low income districts and crime rates?<br>
-	Manhattan had the largest decline in felonies over the years
-
-	Staten Island has kept a low rate of felonies over its years even despite its smaller population
-
-	I believe in Manhattan you are more likely to charged with a felony because more people can afford to take you to court.
-
-	Brooklyn has the most felonies among the more sizeable populations
-
-Bronx has only slightly decreased in felonies
-<br><br>
-
-```{r pp-wrangling}
-
-#Importing my datasets and assigning them
-family_Income_raw <- read.csv("data/Family Income.csv", stringsAsFactors = T)
-#median_Income_raw <- read_csv("data/Median Incomes.csv")
-
-family_Income_data <- family_Income_raw
-#median_Income_data <- median_Income_raw
-
-#Create a list to sort the data by the named Boroughs
-borough <- c("Brooklyn", "Queens" , "Staten Island", "Manhattan", "Bronx")
-
-
-#where the filtering takes place
-family_Income_data <- family_Income_data %>% 
-  filter(Location %in% borough & DataFormat == "Number") %>% 
-  rename(Boroughs = Location) %>% 
-  rename(Number = Data) %>% 
-  select(-DataFormat, -Fips)
-
-
-#I performed this operation to help me properly sort my graphs as I could not get the boroughs to sort from highest income to lowest
-#So I sorted the strings into numbers to sort by
-family_Income_data <- mutate(family_Income_data, Level = ifelse(Income.Level == 	"Under $15,000", 1,
-                                                                ifelse(Income.Level == "$15,000 to $24,999", 2,
-                                                                ifelse(Income.Level == "$25,000 to $34,999", 3,
-                                                                ifelse(Income.Level == "$35,000 to $49,999", 4,
-                                                                ifelse(Income.Level == "$50,000 to $74,999", 5,
-                                                                ifelse(Income.Level == "$75,000 to $99,999", 6,
-                                                                ifelse(Income.Level == "$100,000 to $199,999", 7,
-                                                                ifelse(Income.Level == "$200,000 or more", 8,0
-                                                                              )))))))))
-
-family_Income_data <- family_Income_data[order(family_Income_data$Boroughs, family_Income_data$TimeFrame, family_Income_data$Level),]
-
-rownames(family_Income_data) = seq(length = nrow(family_Income_data))
-
-family_Income_data$Income.Level <- factor(family_Income_data$Income.Level, levels = c("$200,000 or more",
-                                 "$100,000 to $199,999",
-                                 "$75,000 to $99,999",
-                                 "$50,000 to $74,999",
-                                 "$35,000 to $49,999",
-                                 "$25,000 to $34,999",
-                                 "$15,000 to $24,999",
-                                 "Under $15,000"))
-
-```
-
-```{r posted, message=FALSE, warning = FALSE}
-
-#This keeps my numbers from showing in scientific notation
-options(scipen = 999)
-
-#Making my fun multilayed plot, this will group together all 5 boroughs, along side all 8 income levels
-#along side our 14 years. Giving us 5 * 8 * 14 sections to look at
-family_Income_Plot <- family_Income_data %>%
-  ggplot(mapping = aes(x = TimeFrame,
-             y = Number,
-             fill = factor(Income.Level))) +
-  geom_bar(size = 1, stat = "identity") +
-  labs(x = NULL,
-       y = "Number of People",
-       title = "Population Income Grouping from 2005 - 2019") +
-  theme(legend.position = "left",
-        axis.text.x = element_text(angle = 90,
-                                   size = 5),
-        legend.title = element_blank(),
-        plot.title = element_text(size = 15))+
-  facet_wrap(~Boroughs, scales = "free")
-  
-
-family_Income_Plot
-```
-
-```{r posted2, message=FALSE, warning = FALSE}
-
-#I wanted a clean view of 15 years summarized so we can see general conditions over time
-fifteen_Year_Avg <- family_Income_data
-
-fifteen_Year_Avg <- fifteen_Year_Avg %>% 
-  group_by(Boroughs, Income.Level) %>% 
-  summarize(income_avg = mean(Number))
-
-#Reordering my levels on the legend, not having them from greatest to least really bothered me
-fifteen_Year_Avg$Income.Level <- factor(fifteen_Year_Avg$Income.Level, levels = c("$200,000 or more",
-                                 "$100,000 to $199,999",
-                                 "$75,000 to $99,999",
-                                 "$50,000 to $74,999",
-                                 "$35,000 to $49,999",
-                                 "$25,000 to $34,999",
-                                 "$15,000 to $24,999",
-                                 "Under $15,000"))
-
-#Making the bar plot that limits the amount of years down to just the borough average's
-fifteen_Year_Avg_Plot <- fifteen_Year_Avg %>% 
-  ggplot(mapping = aes(x = Income.Level,
-             y = income_avg,
-             fill = factor(Income.Level),
-             shape = Income.Level)) +
-  geom_bar(size = 1, stat = "identity") +
-  labs(x = NULL,
-       y = "Number of People",
-       title = "Population Income Grouping Average") +
-  theme(legend.position = "left",
-        axis.text.x = element_blank(),
-        legend.title = element_blank(),
-        plot.title = element_text(size = 15))+
-  facet_wrap(~Boroughs, scales = "free")
-
-fifteen_Year_Avg_Plot
-
-```
-
-```{r posted3, message=FALSE, warning = FALSE}
-
-#limit Molly's data to the years I have in mine 2005 to 2019
-felony_tot <- subset(hist_felony_by_precinct_data_tot, Year == "2005" | Year == "2006" | Year == "2007" | Year == "2008" | Year == "2009" | Year == "2010" | Year == "2011" | Year == "2012" | Year == "2013" | Year == "2014" | Year == "2015" | Year == "2016" | Year == "2017" | Year == "2018" | Year == "2019")
-
-#Rid the na values
-felony_tot <- na.omit(felony_tot)
-
-#Total and match all the years with the total crimes in that borough
-felony_tot <- felony_tot %>% 
-  group_by(Year, Borough) %>% 
-  mutate(crime_Total = sum(Total)) %>% 
-  select(-Felony) %>%
-  rename(Boroughs = Borough) %>% 
-  distinct(crime_Total)
-
-felony_tot <- na.omit(felony_tot)
-
-family_Income_data <- family_Income_data %>% 
-  select(-Level)
-
-crime_Income_Relation <- merge(family_Income_data, felony_tot, by.x = c("Boroughs", "TimeFrame"), by.y = c("Boroughs", "Year"))
-
-
-#MAKE A BAR AND LINE GRAPH, plotting the line graph atop the income levels to help us see trends
-crime_Income_Relation_Plot <- crime_Income_Relation %>% 
-  ggplot(mapping = aes(x = TimeFrame,
-             fill = factor(Income.Level))) +
-  geom_bar(aes(y=Number), size = 1, stat = "identity") +
-  geom_line(aes(y = 10*crime_Total), size = 1, color="red", group = 1, stat = "identity") +
-  scale_y_continuous(sec.axis = sec_axis(~.*0.1, name = "Crimes Committed")) +
-  labs(x = NULL,
-       y = "Number of People",
-       title = "Population Income Vs Crimes Committed that Year") +
-  theme(legend.position = "left",
-        axis.text.x = element_text(angle = 90,
-                                   size = 5),
-        legend.title = element_blank(),
-        plot.title = element_text(size = 15))+
-  facet_wrap(~Boroughs, scale = "free_y")
-
-crime_Income_Relation_Plot
-
-```
-
-# trayed 
-
-#Census data
-```{r trayed-load-censusHTML, message=FALSE, warning = FALSE}
-#todo: draw more demographic data from census
-# page <- read_html(
-#   "https://www.census.gov/quickfacts/fact/table/NY,newyorkcountynewyork,kingscountynewyork,queenscountynewyork,richmondcountynewyork,bronxcountynewyork/PST045219")
-# page %>% xml2::xml_structure()
-# 
-# county_name <- page %>%
-#   html_nodes(".qf-persist span") %>%
-#   html_text() %>%
-#   str_replace(", New York", "")
-# 
-# county_population <- page %>%
-#   html_nodes(".icon-user-3~ tbody .selected td+ td") %>%
-#   html_text() %>%
-#   trimws() %>%
-#   str_remove_all(",") %>%
-#   as.numeric() %>%
-#   glimpse()
-# 
-# poverty_level <- page %>%
-#   html_nodes("tbody:nth-child(14) .fact~ .fact+ .fact td+ td") %>%
-#   html_text() %>%
-#   trimws() %>%
-#   str_sub(4) %>%
-#   str_remove("%") %>%
-#   as.numeric() %>%
-#   glimpse()
-# 
-# Borough_name <- c("New York Total", "Manhattan", "Brooklyn", "Queens", 
-#                   "Staten Island", "Bronx")
-# 
-# NY_Census <- tibble(borough = Borough_name, county = county_name, 
-#                     Population = county_population, 
-#                     `poverty level` = poverty_level)
-# 
-# NY_Census %>%
-#   write.csv("data/NYC_census_data.csv")
-
-NY_census <- read.csv(file = "data/NYC_census_data.csv") %>%
-  select(2:5)
-```
-
-#Temporary map (only reports population in borough)
-```{r trayed-us-map-temp, message=FALSE, warning = FALSE}
-us_states <- us_map("state")%>%
-  rename(state = abbr)%>%
-  rename(long = x)%>%
-  rename(lat = y)
-
-counties <- us_map("counties")
-
-countiesNY <- counties %>%
-  filter(abbr == "NY")
-
-county_map <- left_join(countiesNY, NY_census, by = "county") %>%
-  na.omit() %>%
-  rename(long = x, lat = y)
-
-county_map %>%
-  ggplot(mapping = aes( x = long, y = lat, group = group, fill = Population))+
-  geom_polygon()+
-  scale_color_distiller(palette = "Spectral", aesthetics = "fill")+
-  theme_map()+
-  coord_equal()+
-  labs(title = "Borough population")+
-  theme_map()
-```
-
-#handgun permit (borough) data
-```{r trayed-gun-data-boroughs, message=FALSE, warning = FALSE}
-#https://www.nydailynews.com/new-york/ny-nypd-gun-ownership-data-20210517-jfodywqu25bvrijmcrtcaocpn4-story.html
-gun_ownership_borough <- read_csv("data/handgun_permits.csv") %>%
-  select(3:6) %>%
-  rename(count = `Count by Zip code`)
-
-gun_ownership_borough <- gun_ownership_borough %>%
-  group_by(County) %>%
-  mutate(sum = sum(count))
-
-gun_ownership_borough$County <- gun_ownership_borough$County %>%
-  trimws() %>%
-  str_to_title() %>%
-  paste("County", sep = " ")
-
-gun_ownership_borough <- gun_ownership_borough %>%
-  select(1,5) %>%
-  rename(county = County)
-```
-
-
-```{r visualize-gun-data-Borough, message=FALSE, warning = FALSE}
-gun_borough_map <- left_join(gun_ownership_borough, county_map,  by = "county")
-
-gun_borough_map %>%
-  ggplot(mapping = aes( x = long, y = lat, group = group, fill = sum))+
-  geom_polygon()+
-  scale_color_distiller(palette = "Spectral", aesthetics = "fill")+
-  theme_map()+
-  coord_equal()+
-  labs(title = "Borough handgun Permits", fill = "Total Permits")+
-  theme_map()
-```
-
-#gun ownership (state) data
-
-```{r trayed-gun-data-states, message=FALSE, warning = FALSE}
-gun_US <- read_csv("data/Gun_ownership_state.csv") %>%
-  #https://worldpopulationreview.com/state-rankings/gun-ownership-by-state
-  rename(full = State) %>%
-  rename(sum = totalGuns) %>%
-  select(1,3)
-
-gun_US %>%
-  rename(State = full,`Total Guns` = sum) %>%
-  arrange(desc(`Total Guns`)) %>%
-  datatable(options = list(pageLength = 5))
-```
-
-
-```{r visualize-gun-data-US, message=FALSE, warning = FALSE}
-#Todo use much more detailed chloropleth map. ggplot for placeholding. 
-gun_mapUS <- left_join(gun_US, us_states, by = "full")  
-gun_mapUS %>%
-  ggplot(mapping = aes( x = long, y = lat, group = group, fill = sum))+
-  geom_polygon()+
-  scale_color_distiller(palette = "Reds", aesthetics = "fill")+
-  theme_map()+
-  coord_equal()+
-  labs(title = "Gun ownership total by State", fill = "Total Guns")+
-  theme_map()
-```
-
-Sources:
-NYC.gov: Historical New York City Crime Data: Citywide Seven Major Felony Offenses 2000-2020 & Historical New York City Crime Data: Citywide Seven Major Felony Offenses by Precinct 2000-2020 
-https://www1.nyc.gov/site/nypd/stats/crime-statistics/historical.page
-NYCOpen: New York City Population by Borough, 1950 - 2040 
-https://data.cityofnewyork.us/City-Government/New-York-City-Population-by-Borough-1950-2040/xywu-7bv9
-Github: nyc by zachcb 
-https://github.com/zachcp/nycmaps
-U.S. Census Bureau: Census data for NY boroughs 
-https://www.census.gov/quickfacts/newyorkcitynewyork
